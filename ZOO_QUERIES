@@ -1,0 +1,110 @@
+--List all persons' full names and cities from the PERSON table.
+select FullName,City from PERSON
+
+--Retrieve all visitors who visited on '2015-02-13'.
+select * from VISITOR
+Where VisitDate='2015-02-13'
+
+--List all employee IDs and their hire dates from the EMPLOYEE table.
+select EmployeeID,HireDate from EMPLOYEE
+
+--Display all exhibits located in 'West Zone'.
+select * from EXHIBIT
+where Location='West Zone'
+
+--Get the full name of all employees from the EMPLOYEE table.
+Select EmployeeFullName from EMPLOYEE
+
+--List all the unique departments from the STAFF table.
+Select distinct(Department) from STAFF
+
+--Retrieve all feeding information where the food type is 'Meat'.
+select * from FEEDING
+where FoodType='Meat'
+
+--Find all zookeepers with ZEmpID starting with 'D'.
+select * from ZOOKEEPER 
+Where ZEmpID like 'D%'
+
+--Show the name of all animals born after '2000-01-01'.
+Select Name,DateofBirth from ANIMAL
+where DateofBirth > '2000-01-01'
+
+--List all skills associated with zookeepers.
+select * from ZSKILLS
+
+                                      -- Intermediate
+
+--Find the full names of visitors and the type of tickets they used.
+SELECT VisitorFullName, TicketType FROM VISITOR;
+
+--Get the number of visitors who visited the zoo after '2000-01-01'.
+SELECT COUNT(*) FROM VISITOR WHERE VisitDate > '2000-01-01';
+
+
+--Find the employees who work in the 'Information' department.
+SELECT E.EmployeeID, E.EmployeeFullName
+FROM EMPLOYEE E
+JOIN STAFF O 
+ON E.EmployeeID = O.OEmpID
+WHERE O.Department = 'Management';
+
+--List all animal species and their associated food types.
+SELECT a.Species, b.FoodType
+FROM ANIMAL a
+JOIN FEEDING b ON a.Species = b.Species;
+
+--Find all animals that belong to the family 'Felidae'.
+SELECT * FROM ANIMAL 
+WHERE Family = 'Felidae';
+
+--List the zookeepers and their associated skills.
+SELECT Z.KeeperID, S.Skill
+FROM ZOOKEEPER Z
+JOIN ZSKILLS S ON Z.KeeperID = S.KSkillID;
+
+--Retrieve the names of employees who have been hired after '2000-01-01' and work in the 'Animal Care' department.
+SELECT a.EmployeeFullName
+FROM EMPLOYEE a
+JOIN STAFF b  ON a.EmployeeID = b.OEmpID
+WHERE a.HireDate > '2000-01-01' AND b.Department = 'Human Resources';
+
+--Display the zookeeper IDs and employee full names for all zookeepers.
+SELECT a.KeeperID, b.EmployeeFullName
+FROM ZOOKEEPER a
+JOIN EMPLOYEE b ON a.ZEmpID = b.EmployeeID;
+
+
+                                            --Hard
+
+--Find the number of employees working in each department.
+SELECT Department, COUNT(*) AS NumberOfEmployees
+FROM STAFF
+GROUP BY Department
+order by COUNT(*) DESC
+
+
+--Get the top 3 species with the most animals in the zoo.
+SELECT top (3) Species, COUNT(*) AS NumberOfAnimals
+FROM ANIMAL
+GROUP BY Species
+ORDER BY NumberOfAnimals DESC
+
+--List employees who are not working as zookeepers.
+SELECT E.EmployeeFullName
+FROM EMPLOYEE E
+WHERE E.EmployeeID NOT IN (SELECT ZEmpID FROM ZOOKEEPER);
+
+
+--Get the full names of all employees who were hired after the most recent visitor's visit.
+SELECT E.EmployeeFullName
+FROM EMPLOYEE E
+WHERE E.HireDate > (SELECT MAX(VisitDate) FROM VISITOR);
+
+--List the names and exhibit locations of animals belonging to the species 'Panthera leo'.
+select * from EXHIBIT
+SELECT A.Name, E.Location
+FROM ANIMAL A
+JOIN EXHIBIT E ON A.Species = 'Panthera leo';
+
+
